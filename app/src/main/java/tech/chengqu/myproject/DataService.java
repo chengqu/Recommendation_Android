@@ -1,5 +1,6 @@
 package tech.chengqu.myproject;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
@@ -21,10 +22,11 @@ import java.util.List;
  * Service for retrieving data from backend.
  */
 public class DataService {
-    /**
-     * Fake all the restaurant data for now. We will refine this and connect
-     * to our backend later.
-     */
+    private Context context;
+
+    DataService(Context context){
+        this.context = context;
+    }
     /**
      * Get nearby restaurants through Yelp API.
      */
@@ -72,8 +74,9 @@ public class DataService {
 
                     // Download the image.
                     Bitmap thumbnail =  getBitmapFromURL(business.getString("image_url"));
-
-                    restaurants.add(new Restaurant(name, address, type, lat, lng, thumbnail));
+                    Double rating = business.getDouble("rating");
+                    Bitmap stars = getBitmapFromRating(rating);
+                    restaurants.add(new Restaurant(name, address, type, lat, lng, thumbnail, stars));
                 }
             }
             return restaurants;
@@ -82,7 +85,31 @@ public class DataService {
         }
         return null;
     }
+public Bitmap getBitmapFromRating(double rating){
+        Bitmap bitmap = null;
+            if(rating <= 0)
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.stars_regular_0);
+            else if(rating > 0 && rating <= 1)
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.stars_regular_1);
+            else if(rating > 1 && rating <= 1.5)
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.stars_regular_1_half);
+            else if(rating > 1.5 && rating <= 2)
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.stars_regular_2);
+            else if(rating > 2 && rating <= 2.5)
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.stars_regular_2_half);
+            else if(rating > 2.5 && rating <= 3)
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.stars_regular_3);
+            else if(rating > 3 && rating <= 3.5)
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.stars_regular_3_half);
+            else if(rating > 3.5 && rating <= 4)
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.stars_regular_4);
+            else if(rating > 4 && rating <= 4.5)
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.stars_regular_4_half);
+            else if(rating > 4.5 && rating <= 5)
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.stars_regular_5);
 
+        return bitmap;
+    }
     /**
      * Download an Image from the given URL, then decodes and returns a Bitmap object.
      */

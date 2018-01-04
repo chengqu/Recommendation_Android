@@ -54,7 +54,7 @@ public class RestaurantListFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        dataService = new DataService();
+        dataService = new DataService(view.getContext());
         return view;
     }
     @Override

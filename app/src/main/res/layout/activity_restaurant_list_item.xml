@@ -23,6 +23,10 @@
             android:textStyle="bold"
             android:textSize="18sp"/>
 
+        <ImageView android:id="@+id/restaurant_rating"
+            android:layout_width="100dp"
+            android:layout_height="25dp"/>
+
 
         <TextView android:id="@+id/restaurant_address"
             android:layout_width="match_parent"
